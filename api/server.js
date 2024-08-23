@@ -5,10 +5,13 @@ const redisClient = require('./redis');
 const socket = require('./socket');
 const port = process.env.PORT || 8000;
 const app = express();
+const userRoutes = require('./routes/user');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
+
+app.use('/api', userRoutes);
 
 const server = app.listen(port, async () => {
     console.log(`Server running on port ${port}`);
