@@ -13,8 +13,7 @@ export async function register(username: string, password: string, name: string,
         password,
         name,
         email,
-        dateOfBirth,
-        role: "employee"
+        dateOfBirth
     };
     formData.append('userData', JSON.stringify(userData));
     console.log(formData.get('image'));

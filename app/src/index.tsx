@@ -6,6 +6,7 @@ import AuthRoute from "./components/auth/AuthRoute";
 import './index.css';
 
 import LoginPage from "./pages/login/login";
+import RegisterPage from "./pages/register/register";
 import HomePage from "./pages/home/home";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
@@ -16,6 +17,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Route index element={<HomePage />} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>
