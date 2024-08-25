@@ -2,6 +2,15 @@ const { DataTypes, Model } = require('sequelize');
 
 class User extends Model {
     static associate(models) {
+        User.hasMany(models.Chat, {
+            foreignKey: 'groupAdminId',
+            as: 'chats'
+        });
+        User.belongsToMany(models.Chat, {
+            through: models.ChatUser,
+            foreignKey: 'userId',
+            as: 'chats_users'
+        });
     }
 }
 

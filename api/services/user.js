@@ -3,6 +3,8 @@ const { hashPassword, comparePasswords } = require('../utils/password');
 const jwt = require('jsonwebtoken');
 const tokenExpiration = process.env.TOKEN_EXPIRATION || '30min';
 const { loginSchema, registerUserSchema } = require('../validations/user');
+const redisClient = require('../redis');
+const { Op } = require('sequelize');
 
 class UserService {
     static async getUserByUsername(username) {
@@ -35,6 +37,7 @@ class UserService {
                 id: user.id
             }
         });
+        await redisClient.sadd('loggedUsers', user.id);
         return { user, token };
     }
 
@@ -55,7 +58,45 @@ class UserService {
             lastLoginDate: new Date()
         });
         const token = jwt.sign({ id: newUser.id }, process.env.SECRET_KEY, { expiresIn: tokenExpiration });
+        await redisClient.sadd('loggedUsers', user.id);
         return { user: newUser, token };
+    }
+
+    static async getAllUsersSearch(search, userId) {
+        const users = await User.findAll({
+            where: {
+                [Op.or]: [
+                    {
+                        username: {
+                            [Op.like]: `%${search}%`
+                        }
+                    },
+                    {
+                        email: {
+                            [Op.like]: `%${search}%`
+                        }
+                    },
+                    {
+                        name: {
+                            [Op.like]: `%${search}%`
+                        }
+                    }
+                ],
+                id: {
+                    [Op.ne]: userId
+                }
+            }
+        })
+        const loggedUsers = await redisClient.smembers('loggedUsers');
+
+        const usersStatus = users.map((user) => {
+            const logged = loggedUsers.includes(user.id.toString());
+            return {
+                ...user.toJSON(),
+                logged
+            };
+        });
+        return usersStatus;
     }
 }
 

@@ -19,7 +19,19 @@ const register = async (req, res) => {
     }
 };
 
+const getAllUsers = async (req, res) => {
+    try {
+        let search = '';
+        if (req.query.search) search = req.query.search
+        const users = await UserService.getAllUsersSearch(search, req.user.id);
+        return res.json(users);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
+
 module.exports = {
     login,
-    register
+    register,
+    getAllUsers
 };	
