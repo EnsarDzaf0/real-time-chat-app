@@ -119,12 +119,12 @@ export default function RegisterPage() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    height: "75vh",
+                    minHeight: "70vh",
                     backgroundColor: "white",
                     padding: "20px",
                     borderRadius: "5px",
                     boxShadow: "0 0 10px rgba(0,0,0,0.1)",
-                    marginTop: "10vh"
+                    marginTop: "3vh"
                 }}
             >
                 <Typography variant="h4" component="h1" gutterBottom>
@@ -208,6 +208,15 @@ export default function RegisterPage() {
                 }}>
                     {registerError}
                 </Typography>
+                <Button
+                    variant="text"
+                    color="primary"
+                    fullWidth
+                    onClick={() => navigate('/login')}
+                    sx={{ marginTop: "10px", width: "50%" }}
+                >
+                    Already have an account? Login
+                </Button>
             </Box>
         </Container>
     )

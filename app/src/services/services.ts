@@ -5,6 +5,7 @@ export const baseUrl = 'http://localhost:8080/api';
 
 export const loginRoute = '/login';
 export const registerRoute = '/register';
+export const logoutRoute = '/logout';
 
 interface RequestParams {
     url: string;

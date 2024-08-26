@@ -98,6 +98,10 @@ class UserService {
         });
         return usersStatus;
     }
+
+    static async logoutUser(user) {
+        await redisClient.srem('loggedUsers', user.id);
+    }
 }
 
 module.exports = UserService;

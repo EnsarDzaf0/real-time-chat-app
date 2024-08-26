@@ -138,6 +138,15 @@ export default function LoginPage() {
                     }>
                         {loginError}
                     </Typography>
+                    <Button
+                        variant="text"
+                        color="primary"
+                        fullWidth
+                        onClick={() => navigate('/register')}
+                        sx={{ marginTop: "10px", width: "50%" }}
+                    >
+                        Don't have an account? Register
+                    </Button>
                 </Box>
                 )}
         </Container>
