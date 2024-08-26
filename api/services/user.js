@@ -1,7 +1,7 @@
 const { User } = require('../models/index');
 const { hashPassword, comparePasswords } = require('../utils/password');
 const jwt = require('jsonwebtoken');
-const tokenExpiration = process.env.TOKEN_EXPIRATION || '30min';
+const tokenExpiration = process.env.TOKEN_EXPIRATION || '1d';
 const { loginSchema, registerUserSchema } = require('../validations/user');
 const redisClient = require('../redis');
 const { Op } = require('sequelize');
