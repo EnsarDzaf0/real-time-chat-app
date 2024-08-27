@@ -27,7 +27,6 @@ const UserChats = ({ fetchAgain }: { fetchAgain: any }) => {
 
     useEffect(() => {
         const userInfo = localStorage.getItem('user');
-        console.log(userInfo);
 
         if (userInfo) {
             const parsedUserInfo: User = JSON.parse(userInfo);
