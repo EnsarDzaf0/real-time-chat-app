@@ -5,7 +5,7 @@ import SingleChat from './SingleChat';
 const ChatBox = ({ fetchAgain, setFetchAgain }: { fetchAgain: any, setFetchAgain: any }) => {
     return (
         <Paper>
-            {/* <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} /> */}
+            <SingleChat fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
         </Paper>
     );
 };

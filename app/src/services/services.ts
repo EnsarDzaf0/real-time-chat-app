@@ -9,6 +9,9 @@ export const logoutRoute = '/logout';
 export const usersRoute = '/users';
 export const chatRoute = '/chat';
 export const chatsRoute = '/chats';
+export const groupRoute = '/group';
+export const messageRoute = '/message';
+export const messagesRoute = '/messages';
 
 interface RequestParams {
     url: string;

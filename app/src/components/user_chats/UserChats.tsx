@@ -4,7 +4,7 @@ import { styled } from '@mui/system';
 import { useChatState } from '../../context/chat';
 import { getChats } from '../../services/chat';
 import { getSender } from '../../utils/chatLogic';
-//import GroupChatModal from '../Modals/GroupChatModal';
+import GroupChatModal from '../group_modal/GroupModal';
 import socket from '../../utils/socket';
 import { User } from '../../types/user';
 
@@ -26,7 +26,9 @@ const UserChats = ({ fetchAgain }: { fetchAgain: any }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
-        const userInfo = localStorage.getItem('userInfo');
+        const userInfo = localStorage.getItem('user');
+        console.log(userInfo);
+
         if (userInfo) {
             const parsedUserInfo: User = JSON.parse(userInfo);
             setLoggedUser(parsedUserInfo);
@@ -84,7 +86,7 @@ const UserChats = ({ fetchAgain }: { fetchAgain: any }) => {
                     </Typography>
                 </Box>
             ))}
-            {/* <GroupChatModal open={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
+            <GroupChatModal open={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </Paper>
     )
 };

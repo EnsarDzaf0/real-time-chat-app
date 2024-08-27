@@ -18,7 +18,6 @@ export async function register(username: string, password: string, name: string,
         dateOfBirth
     };
     formData.append('userData', JSON.stringify(userData));
-    console.log(formData.get('image'));
     const data = await customPost<LoginUserResponse>({ url: registerRoute, body: formData, requiresAuth: false });
     localStorage.setItem('user', JSON.stringify(data.user));
     return data;

@@ -7,6 +7,7 @@ import {
 } from '@mui/material';
 import SideDrawer from '../../components/sidebar/SideBar';
 import UserChats from '../../components/user_chats/UserChats';
+import ChatBox from '../../components/chat_box/ChatBox';
 
 export default function HomePage() {
     const [fetchAgain, setFetchAgain] = useState();
@@ -20,7 +21,7 @@ export default function HomePage() {
                 <UserChats fetchAgain={fetchAgain} />
             </Grid>
             <Grid item xs={12} sm={8}>
-                {/* <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} /> */}
+                <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
             </Grid>
         </Grid>
     )

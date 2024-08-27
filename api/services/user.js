@@ -57,8 +57,9 @@ class UserService {
             image: file ? file.location : null,
             lastLoginDate: new Date()
         });
+
         const token = jwt.sign({ id: newUser.id }, process.env.SECRET_KEY, { expiresIn: tokenExpiration });
-        await redisClient.sadd('loggedUsers', user.id);
+        await redisClient.sadd('loggedUsers', newUser.id);
         return { user: newUser, token };
     }
 
