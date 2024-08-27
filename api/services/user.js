@@ -85,7 +85,10 @@ class UserService {
                 id: {
                     [Op.ne]: userId
                 }
-            }
+            },
+            attributes: {
+                exclude: ['password']
+            },
         })
         const loggedUsers = await redisClient.smembers('loggedUsers');
 

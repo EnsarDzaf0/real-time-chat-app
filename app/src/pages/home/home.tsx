@@ -1,19 +1,30 @@
-import { Typography, Button, Box } from '@mui/material';
-import { clearCookies } from '../../services/services';
-import { useNavigate } from 'react-router-dom';
-import { logout } from '../../services/user';
+import React, { useState } from 'react';
+import {
+    Typography,
+    Button,
+    Box,
+    Grid
+} from '@mui/material';
+import SideDrawer from '../../components/sidebar/SideBar';
+import UserChats from '../../components/user_chats/UserChats';
 
 export default function HomePage() {
-    const navigate = useNavigate();
-
-    const handleLogout = async () => {
-        await logout();
-        clearCookies();
-        navigate('/login');
-    }
+    const [fetchAgain, setFetchAgain] = useState();
 
     return (
-        <Box sx={{ p: 2 }}>
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <SideDrawer />
+            </Grid>
+            <Grid item xs={12} sm={4}>
+                <UserChats fetchAgain={fetchAgain} />
+            </Grid>
+            <Grid item xs={12} sm={8}>
+                {/* <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} /> */}
+            </Grid>
+        </Grid>
+    )
+    {/* <Box sx={{ p: 2 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h4" color={"beige"}>Real-time Chat</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -22,6 +33,6 @@ export default function HomePage() {
                     </Button>
                 </Box>
             </Box>
-        </Box>
-    )
+        </Box> */}
+
 }

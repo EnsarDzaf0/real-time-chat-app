@@ -6,6 +6,9 @@ export const baseUrl = 'http://localhost:8080/api';
 export const loginRoute = '/login';
 export const registerRoute = '/register';
 export const logoutRoute = '/logout';
+export const usersRoute = '/users';
+export const chatRoute = '/chat';
+export const chatsRoute = '/chats';
 
 interface RequestParams {
     url: string;

@@ -19,3 +19,16 @@ export interface RouteResponse {
     status: number;
     message: string;
 }
+
+export interface User {
+    id: number;
+    name: string;
+    username: string;
+    email: string;
+    lastLoginDate: string | null;
+    image: string | null;
+    dateOfBirth: string;
+    createdAt: string;
+    updatedAt: string;
+    logged: boolean;
+}

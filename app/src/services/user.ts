@@ -1,5 +1,5 @@
-import { LoginUserResponse } from '../types/user';
-import { customPost, loginRoute, registerRoute } from './services';
+import { LoginUserResponse, User } from '../types/user';
+import { customPost, loginRoute, registerRoute, customGet, usersRoute } from './services';
 
 export async function login(username: string, password: string): Promise<LoginUserResponse> {
     const data = await customPost<LoginUserResponse>({ url: loginRoute, body: { username, password }, requiresAuth: false });
@@ -27,4 +27,9 @@ export async function register(username: string, password: string, name: string,
 export async function logout() {
     await customPost({ url: '/logout', requiresAuth: true });
     localStorage.removeItem('user');
+}
+
+export async function searchUser(search: string): Promise<User[]> {
+    const response: User[] = await customGet({ url: usersRoute, queryParams: { search }, requiresAuth: true });
+    return response;
 }
