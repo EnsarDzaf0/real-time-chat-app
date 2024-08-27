@@ -8,12 +8,13 @@ const app = express();
 
 const userRoutes = require('./routes/user');
 const chatRoutes = require('./routes/chat');
+const messageRoutes = require('./routes/message');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use('/api', userRoutes, chatRoutes);
+app.use('/api', userRoutes, chatRoutes, messageRoutes);
 
 const server = app.listen(port, async () => {
     console.log(`Server running on port ${port}`);

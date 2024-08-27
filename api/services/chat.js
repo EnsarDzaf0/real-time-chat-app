@@ -1,21 +1,14 @@
 const { User, Chat, Message, ChatUser } = require('../models/index');
-const { Op, where } = require('sequelize');
+const { Op, sequelize } = require('sequelize');
 
 class ChatService {
-    static async accessChat(currentUserId, userId) {
-        const isChat = await Chat.findOne({
-            where: {
-                isGroupChat: false
-            },
+
+    static async getChatById(chatId) {
+        const fullChat = await Chat.findByPk(chatId, {
             include: [
                 {
                     model: User,
                     as: 'users',
-                    where: {
-                        id: {
-                            [Op.and]: [currentUserId, userId]
-                        }
-                    },
                     attributes: {
                         exclude: ['password']
                     },
@@ -25,19 +18,43 @@ class ChatService {
                 },
                 {
                     model: Message,
-                    as: 'messages',
-                    limit: 1,
-                    order: [['createdAt', 'DESC']],
+                    as: 'latestMessage',
                     include: {
                         model: User,
                         as: 'sender',
                         attributes: ['id', 'username', 'image']
                     }
                 }
+            ]
+        });
+
+        return fullChat;
+    }
+
+    static async accessChat(currentUserId, userId) {
+        const isChat = await Chat.findOne({
+            where: {
+                isGroupChat: false
+            },
+            include: [
+                {
+                    model: User,
+                    as: 'users',
+                    through: {
+                        attributes: []
+                    },
+                    where: {
+                        id: {
+                            [Op.in]: [currentUserId, userId]
+                        }
+                    }
+                }
             ],
-        })
+            group: ['Chat.id'],
+        });
+
         if (isChat) {
-            return isChat;
+            return await this.getChatById(isChat.id);
         } else {
             const newChat = await Chat.create({
                 chatName: 'Chat',
@@ -47,26 +64,7 @@ class ChatService {
             await newChat.addUser(currentUserId);
             await newChat.addUser(userId);
 
-            const fullChat = await Chat.findByPk(newChat.id, {
-                include: [
-                    {
-                        model: User,
-                        as: 'users',
-                        attributes: {
-                            exclude: ['password']
-                        }
-                    },
-                    {
-                        model: Message,
-                        as: 'messages',
-                        include: {
-                            model: User,
-                            as: 'sender',
-                            attributes: ['id', 'username', 'image']
-                        }
-                    }
-                ]
-            });
+            const fullChat = await this.getChatById(newChat.id);
 
             return fullChat;
         }
@@ -107,9 +105,7 @@ class ChatService {
                 },
                 {
                     model: Message,
-                    as: 'messages',
-                    limit: 1,
-                    order: [['createdAt', 'DESC']],
+                    as: 'latestMessage',
                     include: {
                         model: User,
                         as: 'sender',
@@ -295,6 +291,14 @@ class ChatService {
             ]
         });
         return updatedGroup;
+    }
+
+    static async updateLastMessage(chatId, messageId) {
+        await Chat.update({ latestMessageId: messageId }, {
+            where: {
+                id: chatId
+            }
+        });
     }
 }
 

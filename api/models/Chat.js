@@ -15,6 +15,10 @@ class Chat extends Model {
             foreignKey: 'chatId',
             as: 'messages'
         });
+        Chat.belongsTo(models.Message, {
+            foreignKey: 'latestMessageId',
+            as: 'latestMessage'
+        });
     }
 }
 
@@ -38,6 +42,11 @@ module.exports = (sequelize) => {
         },
         groupAdminId: {
             field: 'group_admin_id',
+            type: DataTypes.INTEGER,
+            allowNull: true
+        },
+        latestMessageId: {
+            field: 'latest_message_id',
             type: DataTypes.INTEGER,
             allowNull: true
         },
