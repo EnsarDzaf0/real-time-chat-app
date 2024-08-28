@@ -18,9 +18,9 @@ export async function updateGroupChat(chatId: number, name: string): Promise<Cha
 }
 
 export async function addUserToGroupChat(chatId: number, userId: number): Promise<Chat> {
-    return customPut({ url: groupRoute, body: { chatId, userId }, requiresAuth: true });
+    return customPut({ url: groupRoute + '/add', body: { chatId, userId }, requiresAuth: true });
 }
 
 export async function removeUserFromGroupChat(chatId: number, userId: number): Promise<Chat> {
-    return customPut({ url: groupRoute, body: { chatId, userId }, requiresAuth: true });
+    return customPut({ url: groupRoute + '/remove', body: { chatId, userId }, requiresAuth: true });
 }

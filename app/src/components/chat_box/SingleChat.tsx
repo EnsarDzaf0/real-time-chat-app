@@ -76,19 +76,25 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
 
     useEffect(() => {
         socket.on('messageReceived', (newMessageReceived) => {
-            if (!selectedChat || selectedChat.id !== newMessageReceived.chat.id) {
-                if (!notification.includes(newMessageReceived)) {
+            const isUserInChat = selectedChat?.id === newMessageReceived.chat.id;
+            const isUserRecipient = newMessageReceived.chat.users.some(
+                (u: User) => u.id === user?.id
+            );
+
+            if (!isUserInChat && isUserRecipient) {
+                if (!notification.some((n) => n.id === newMessageReceived.id)) {
                     setNotification([newMessageReceived, ...notification]);
                     setFetchAgain(!fetchAgain);
                 }
-            } else {
+            } else if (isUserInChat) {
                 setMessages([...messages, newMessageReceived]);
             }
         });
+
         return () => {
             socket.off('messageReceived');
         };
-    });
+    }, [selectedChat, notification, messages, user, fetchAgain, setFetchAgain, setNotification]);
 
     const sendMessage = async (e: any) => {
         const updateData = {

@@ -11,7 +11,6 @@ import {
     Box,
     Button,
 } from '@mui/material';
-import CircleIcon from '@mui/icons-material/Circle';
 import CloseIcon from '@mui/icons-material/Close';
 import UserListItem from '../user/UserListItem';
 import { useChatState } from '../../context/chat';
@@ -58,7 +57,7 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
     const [searchResult, setSearchResult] = useState<User[]>([]);
     const [groupName, setGroupName] = useState<string>('');
 
-    const { selectedChat, setSelectedChat, user } = useChatState();
+    const { selectedChat, setSelectedChat, user, setChats } = useChatState();
     //const loggedUser = localStorage.getItem('user');
 
     const handleSearch = async (query: string) => {
@@ -73,8 +72,12 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
     const handleRemoveUser = async (userToRemove: User) => {
         try {
             if (selectedChat?.groupAdmin?.id !== user?.id && userToRemove.id !== user?.id) {
-                return;
+                throw new Error('You are not the admin of this group');
             }
+            console.log('selectedChat?.id', selectedChat?.id);
+            console.log('userToRemove.id', userToRemove.id);
+
+
             const data = await removeUserFromGroupChat(selectedChat?.id || 0, userToRemove.id);
             userToRemove.id === user?.id ? setSelectedChat(null) : setSelectedChat(data);
             setSelectedChat(data);
@@ -86,25 +89,39 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
     };
 
     const handleAddUser = async (userToAdd: User) => {
-        if (selectedChat?.users.find((user) => user.id === userToAdd.id)) {
-            return;
+        try {
+            if (selectedChat?.users.find((user) => user.id === userToAdd.id)) {
+                throw new Error('User already in the group');
+            }
+            if (selectedChat?.groupAdmin?.id !== user?.id) {
+                throw new Error('You are not the admin of this group');
+            }
+            const data = await addUserToGroupChat(selectedChat?.id || 0, userToAdd.id);
+            setSelectedChat(data);
+            setFetchAgain(!fetchAgain);
+        } catch (error) {
+            toast.error((error as Error).message);
         }
-        if (selectedChat?.groupAdmin?.id !== user?.id) {
-            return;
-        }
-        const data = await addUserToGroupChat(selectedChat?.id || 0, userToAdd.id);
-        setSelectedChat(data);
-        setFetchAgain(!fetchAgain);
     };
 
     const handleUpdate = async () => {
-        const updatedGroup = await updateGroupChat(selectedChat?.id || 0, groupName);
-        if (updatedGroup) {
-            socket.emit('updateGroup', updatedGroup);
-            setSelectedChat(updatedGroup);
-            setFetchAgain(!fetchAgain);
-            setGroupName('');
-            onClose();
+        try {
+            if (!groupName) {
+                throw new Error('Group name is required');
+            }
+            if (selectedChat?.groupAdmin?.id !== user?.id) {
+                throw new Error('You are not the admin of this group');
+            }
+            const updatedGroup = await updateGroupChat(selectedChat?.id || 0, groupName);
+            if (updatedGroup) {
+                socket.emit('updateGroup', updatedGroup);
+                setSelectedChat(updatedGroup);
+                setFetchAgain(!fetchAgain);
+                setGroupName('');
+                onClose();
+            }
+        } catch (error) {
+            toast.error((error as Error).message);
         }
     };
     return (
@@ -117,6 +134,7 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
             </ModalTitle>
             <DialogContent>
                 {selectedChat?.users.map((u) => {
+
                     if (u.id !== user?.id) {
                         return (
                             <Chip
@@ -124,22 +142,19 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
                                 label={
                                     <>
                                         <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <CircleIcon
-                                                style={{ color: user?.logged ? 'green' : 'red', transform: 'scale(0.7)' }}
-                                            />
-                                            <span style={{ marginLeft: '8px' }}>{u.name} X</span>
+                                            <span style={{ marginLeft: '8px' }}>{u.username} X</span>
                                         </div>
                                     </>
                                 }
                                 variant='outlined'
-                                sx={{ backgroundColor: 'primary.main', cursor: 'pointer' }}
+                                sx={{ backgroundColor: 'white', cursor: 'pointer' }}
                                 onClick={() => handleRemoveUser(u)}
                             />
                         );
                     }
                     return null;
                 })}
-                {selectedChat?.users.length === 1 && (
+                {selectedChat?.users.length === 0 && (
                     <Typography sx={{ color: 'red' }}>You are alone in the group*</Typography>
                 )}
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -186,9 +201,12 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
                 <LeaveGroupButton
                     variant='contained'
                     color='error'
-                    onClick={() => {
-                        handleRemoveUser(user as User);
+                    onClick={async () => {
+                        await removeUserFromGroupChat(selectedChat?.id || 0, user?.id || 0);
                         setSelectedChat(null);
+                        setChats(
+                            (prev) => prev.filter((chat) => chat.id !== selectedChat?.id)
+                        );
                         onClose();
                     }}>
                     Leave Group

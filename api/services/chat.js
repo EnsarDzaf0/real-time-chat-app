@@ -257,7 +257,7 @@ class ChatService {
         if (!groupExists) {
             throw new Error('Group not found');
         }
-        if (groupExists.groupAdminId !== adminId) {
+        if (groupExists.groupAdminId !== adminId && adminId !== userId) {
             throw new Error('You are not the admin of this group');
         }
         const userExists = await ChatUser.findOne({
