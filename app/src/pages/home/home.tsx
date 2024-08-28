@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
 import {
-    Typography,
-    Button,
-    Box,
     Grid
 } from '@mui/material';
 import SideDrawer from '../../components/sidebar/SideBar';
@@ -10,7 +7,7 @@ import UserChats from '../../components/user_chats/UserChats';
 import ChatBox from '../../components/chat_box/ChatBox';
 
 export default function HomePage() {
-    const [fetchAgain, setFetchAgain] = useState();
+    const [fetchAgain, setFetchAgain] = useState<boolean>(false);
 
     return (
         <Grid container spacing={2}>
@@ -24,16 +21,5 @@ export default function HomePage() {
                 <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />
             </Grid>
         </Grid>
-    )
-    {/* <Box sx={{ p: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h4" color={"beige"}>Real-time Chat</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Button variant="contained" color="secondary" onClick={() => handleLogout()} sx={{ mr: 2 }}>
-                        Logout
-                    </Button>
-                </Box>
-            </Box>
-        </Box> */}
-
+    );
 }

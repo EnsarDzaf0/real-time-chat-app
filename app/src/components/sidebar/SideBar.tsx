@@ -139,7 +139,7 @@ const SideBar = () => {
                         <SearchIcon />
                     </IconButton>
                 </SearchContainer>
-                <LiveChatText variant='body1'>Live Chat Application</LiveChatText>
+                <LiveChatText variant='body1'>Real-Time Chat App</LiveChatText>
                 <div>
                     <IconButton aria-label='notifications' onClick={handleNotificationOpen}>
                         <Badge badgeContent={notification.length} color='secondary'>

@@ -15,9 +15,10 @@ const UserListItem: React.FC<UserListItemProps> = ({ user, handleFunction }) => 
                 display: 'flex',
                 alignItems: 'center',
                 width: 250,
+                height: 25,
                 margin: 2,
                 padding: 2,
-                backgroundColor: '#DCDCDC',
+                backgroundColor: '#97D9E1',
                 borderRadius: 4,
                 '&:hover': {
                     backgroundColor: 'primary.main',

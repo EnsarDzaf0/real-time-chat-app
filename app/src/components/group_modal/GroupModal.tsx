@@ -28,7 +28,10 @@ const ModalTitle = styled(DialogTitle)`
 `;
 
 const CreateChatButton = styled(Button)`
-  text-transform: none; /* Remove uppercase */
+    text-transform: none; /* Remove uppercase */
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #D9AFD9 0%, #97D9E1 100%);
+    color: black;
 `;
 
 const CloseButton = styled(IconButton)`
@@ -139,7 +142,7 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({ open, onClose }) => {
                     ))}
             </DialogContent>
             <Box
-                sx={{ display: 'flex', justifyContent: 'flex-end', padding: '8px', marginRight: '20px' }}>
+                sx={{ display: 'flex', justifyContent: 'flex-end', padding: '20px', marginRight: '10px' }}>
                 <CreateChatButton variant='contained' color='primary' onClick={handleCreateChat}>
                     Create Chat
                 </CreateChatButton>

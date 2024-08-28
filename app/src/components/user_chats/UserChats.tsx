@@ -20,7 +20,15 @@ const TitleText = styled(Typography)`
   color: black;
 `;
 
-const UserChats = ({ fetchAgain }: { fetchAgain: any }) => {
+const NewGroupButton = styled(Button)`
+    margin-top: 5px;
+    padding: 12px;
+    background-color: #0093E9;
+    background-image: linear-gradient(160deg, #D9AFD9 0%, #97D9E1 100%);
+    color: black;
+`;
+
+const UserChats = ({ fetchAgain }: { fetchAgain: boolean }) => {
     const [loggedUser, setLoggedUser] = useState<User | null>(null);
     const { selectedChat, setSelectedChat, chats, setChats } = useChatState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,12 +65,12 @@ const UserChats = ({ fetchAgain }: { fetchAgain: any }) => {
     }, [chats, setChats]);
 
     return (
-        <Paper sx={{ minHeight: '85vh', padding: 2 }}>
-            <Stack direction='row' alignItems='center' mb={2}>
+        <Paper sx={{ minHeight: '85vh', padding: 2, maxWidth: '35vh' }}>
+            <Stack direction='column' alignItems='center' mb={2}>
                 <TitleText>My Chats</TitleText>
-                <Button variant='contained' onClick={() => setIsModalOpen(true)}>
+                <NewGroupButton variant='contained' onClick={() => setIsModalOpen(true)}>
                     New Group Chat
-                </Button>
+                </NewGroupButton>
             </Stack>
 
             {chats?.map((chat) => (
@@ -70,15 +78,17 @@ const UserChats = ({ fetchAgain }: { fetchAgain: any }) => {
                     key={chat.id}
                     onClick={() => setSelectedChat(chat)}
                     sx={{
-                        width: 250,
+                        minWidth: 200,
                         margin: 2,
                         padding: 2,
-                        backgroundColor: selectedChat?.id === chat?.id ? 'primary.main' : '#DCDCDC',
+                        backgroundColor: selectedChat?.id === chat?.id ? '#0093E9' : 'whitesmoke',
+                        backgroundImage: selectedChat?.id === chat?.id ? 'linear-gradient(160deg, #D9AFD9 0%, #97D9E1 100%)' : 'none',
                         borderRadius: 4,
                         '&:hover': {
-                            backgroundColor: 'primary.main',
+                            backgroundColor: '#D9AFD9',
                             opacity: [0.9, 0.8, 0.7],
                         },
+                        color: selectedChat?.id === chat?.id ? '#00526c' : '#006e8a',
                     }}>
                     <Typography sx={{ fontWeight: 'bold' }}>
                         {!chat?.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}

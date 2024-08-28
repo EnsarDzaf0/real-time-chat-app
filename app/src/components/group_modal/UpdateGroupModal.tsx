@@ -45,11 +45,11 @@ const LeaveGroupButton = styled(Button)`
 `;
 
 interface UpdateGroupChatModalProps {
-    fetchAgain: any;
-    setFetchAgain: any;
+    fetchAgain: boolean;
+    setFetchAgain: React.Dispatch<React.SetStateAction<boolean>>;
     open: boolean;
     onClose: () => void;
-    fetchMessages: any;
+    fetchMessages: () => Promise<void>;
 }
 
 const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain, setFetchAgain, open, onClose, fetchMessages }) => {
@@ -74,9 +74,6 @@ const UpdateGroupChatModal: React.FC<UpdateGroupChatModalProps> = ({ fetchAgain,
             if (selectedChat?.groupAdmin?.id !== user?.id && userToRemove.id !== user?.id) {
                 throw new Error('You are not the admin of this group');
             }
-            console.log('selectedChat?.id', selectedChat?.id);
-            console.log('userToRemove.id', userToRemove.id);
-
 
             const data = await removeUserFromGroupChat(selectedChat?.id || 0, userToRemove.id);
             userToRemove.id === user?.id ? setSelectedChat(null) : setSelectedChat(data);

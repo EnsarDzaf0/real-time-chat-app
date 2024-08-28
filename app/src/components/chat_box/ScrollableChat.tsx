@@ -31,6 +31,7 @@ const ScrollableChat: React.FC<ScrollableChatProps> = ({ messages }) => {
                 maxHeight: '75vh',
                 marginBottom: '10px',
                 scrollBehavior: 'smooth',
+                padding: '10px',
             }}>
             {messages.map((m, i) => (
                 <Stack
@@ -47,7 +48,7 @@ const ScrollableChat: React.FC<ScrollableChatProps> = ({ messages }) => {
                     )}
                     <Box
                         sx={{
-                            backgroundColor: `${m.sender?.id === user?.id ? '#BEE3F8' : '#B9F5D0'}`,
+                            backgroundColor: `${m.sender?.id === user?.id ? '#BEE3F8' : '#97D9E1'}`,
                             borderRadius: '20px',
                             padding: '5px 15px',
                             maxWidth: '75%',

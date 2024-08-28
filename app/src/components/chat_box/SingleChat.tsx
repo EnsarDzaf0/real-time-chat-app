@@ -14,8 +14,8 @@ import { Message } from '../../types/chatContext';
 import { User } from '../../types/user';
 
 interface SingleChatProps {
-    fetchAgain: any;
-    setFetchAgain: any;
+    fetchAgain: boolean;
+    setFetchAgain: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) => {
@@ -37,7 +37,6 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
 
         const data = await getMessages(selectedChat.id);
         setMessages(data);
-        console.log('fetchMessages', data);
 
         socket.emit('joinChat', selectedChat.id);
     };
@@ -96,7 +95,7 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
         };
     }, [selectedChat, notification, messages, user, fetchAgain, setFetchAgain, setNotification]);
 
-    const sendMessage = async (e: any) => {
+    const sendMessage = async (e: React.KeyboardEvent<HTMLInputElement>) => {
         const updateData = {
             content: newMessage,
             chatId: selectedChat?.id,
@@ -115,7 +114,7 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
         }
     };
 
-    const typingHandler = (e: any) => {
+    const typingHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNewMessage(e.target.value);
         if (!socketConnected) return;
         if (!typing) {
@@ -142,7 +141,9 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
                 <>
                     <Typography variant='h5'>
                         {!selectedChat.isGroupChat ? (
-                            <Stack direction='row' alignItems='center' justifyContent='space-between'>
+                            <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{
+                                padding: '10px',
+                            }}>
                                 <span>{getSender(user, selectedChat.users)}</span>
                                 <ProfileModal
                                     user={getSenderFull(user, selectedChat.users)}
@@ -153,7 +154,9 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
                             </Stack>
                         ) : (
                             <>
-                                <Stack direction='row' alignItems='center' justifyContent='space-between'>
+                                <Stack direction='row' alignItems='center' justifyContent='space-between' sx={{
+                                    padding: '10px',
+                                }}>
                                     <span>{selectedChat.chatName.toUpperCase()}</span>
                                     <UpdateGroupChatModal
                                         fetchAgain={fetchAgain}
@@ -178,7 +181,7 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
                             justifyContent: 'flex-end',
                         }}>
                         <ScrollableChat messages={messages} />
-                        <FormControl onKeyDown={sendMessage} required sx={{ marginTop: '3px' }}>
+                        <FormControl onKeyDown={sendMessage} required sx={{ marginTop: '3px', padding: '10px' }}>
                             {isTyping && <div>{`${typingUser} typing...`}</div>}
                             <Input placeholder='Enter a message...' onChange={typingHandler} value={newMessage} />
                         </FormControl>

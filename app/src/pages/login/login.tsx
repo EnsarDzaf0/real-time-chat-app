@@ -52,16 +52,15 @@ export default function LoginPage() {
                 navigate('/');
                 return;
             }
-            const data: any = response;
+            const data: RouteResponse = response;
             setLoginError(data.error);
             setIsLoading(false);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
             setIsLoading(false);
         } finally {
             setIsLoading(false);
         }
-
     };
 
     const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {

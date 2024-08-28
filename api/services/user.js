@@ -73,11 +73,6 @@ class UserService {
                         }
                     },
                     {
-                        email: {
-                            [Op.like]: `%${search}%`
-                        }
-                    },
-                    {
                         name: {
                             [Op.like]: `%${search}%`
                         }

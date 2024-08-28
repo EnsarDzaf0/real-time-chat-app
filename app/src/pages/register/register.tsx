@@ -15,6 +15,7 @@ import { register } from '../../services/user';
 import { RouteResponse, LoginUserResponse } from "../../types/user";
 import Cookies from 'js-cookie';
 import { tokenPresent } from '../../services/services';
+import { useChatState } from '../../context/chat';
 
 export default function RegisterPage() {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function RegisterPage() {
     const [dateOfBirth, setDateOfBirth] = useState<Dayjs | null>(dayjs(new Date()));
     const [imageUrl, setImageUrl] = useState<File | null>(null);
     const [registerError, setRegisterError] = useState('');
+    const { setUser } = useChatState();
 
     const [errors, setErrors] = useState<{
         username: string;
@@ -95,12 +97,13 @@ export default function RegisterPage() {
             const res: LoginUserResponse | RouteResponse = response;
             if ('user' in res) {
                 Cookies.set('token', "Bearer " + res.token);
+                setUser(JSON.parse(localStorage.getItem('user') || 'null'));
                 navigate('/');
                 return;
             }
-            const data: any = res;
+            const data: RouteResponse = res;
             setRegisterError(data.message);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error(error);
         }
     }
