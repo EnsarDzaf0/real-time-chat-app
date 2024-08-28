@@ -43,23 +43,29 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
     };
 
     useEffect(() => {
+        const currentChatId = selectedChat?.id;
+
         socket.emit('setup', user);
         socket.on('connected', () => setSocketConnected(true));
-        socket.on('typing', () => {
-            const typingUser = user;
-            const { name } = typingUser as User;
-            setIsTyping(true);
-            setTypingUser(name);
+        socket.on('typing', (userName, chatId) => {
+            if (chatId === currentChatId) {
+                setTypingUser(userName || '');
+                setIsTyping(true);
+            }
         });
 
-        socket.on('stopTyping', () => setIsTyping(false));
+        socket.on('stopTyping', (chatId) => {
+            if (chatId === currentChatId) {
+                setIsTyping(false);
+            }
+        });
 
         return () => {
             socket.off('connected');
             socket.off('typing');
             socket.off('stopTyping');
         };
-    }, [user]);
+    }, [user, selectedChat]);
 
     useEffect(() => {
         fetchMessages();
@@ -108,7 +114,7 @@ const SingleChat: React.FC<SingleChatProps> = ({ fetchAgain, setFetchAgain }) =>
         if (!socketConnected) return;
         if (!typing) {
             setTyping(true);
-            socket.emit('typing', selectedChat?.id);
+            socket.emit('typing', selectedChat?.id, user?.name);
         }
         let lastTypingTime = new Date().getTime();
         let timerLength = 3000;

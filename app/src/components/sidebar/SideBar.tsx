@@ -124,6 +124,7 @@ const SideBar = () => {
     const handleLogout = async () => {
         await logout();
         clearCookies();
+        setSelectedChat(null);
         navigate('/login');
     }
 

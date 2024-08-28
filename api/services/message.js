@@ -51,7 +51,7 @@ class MessageService {
                     attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 }
             ],
-            order: [['createdAt', 'DESC']]
+            order: [['createdAt', 'ASC']]
         });
         return messages;
     }

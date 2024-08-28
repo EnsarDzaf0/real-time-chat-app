@@ -22,11 +22,11 @@ module.exports = (server) => {
         });
 
         socket.on('typing', (chat, user) => {
-            socket.in(chat).emit('typing', user);
+            socket.in(chat).emit('typing', user, chat);
         });
 
         socket.on('stopTyping', (chat) => {
-            socket.in(chat).emit('stopTyping');
+            socket.in(chat).emit('stopTyping', chat);
         });
 
         socket.on('newMessage', (newMessage) => {
