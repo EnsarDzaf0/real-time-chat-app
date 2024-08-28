@@ -1,5 +1,5 @@
 const { User, Chat, Message, ChatUser } = require('../models/index');
-const { Op, sequelize } = require('sequelize');
+const { Op } = require('sequelize');
 
 class ChatService {
 
@@ -22,7 +22,7 @@ class ChatService {
                     include: {
                         model: User,
                         as: 'sender',
-                        attributes: ['id', 'username', 'image']
+                        attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                     }
                 }
             ]
@@ -32,29 +32,28 @@ class ChatService {
     }
 
     static async accessChat(currentUserId, userId) {
-        const isChat = await Chat.findOne({
+        if (currentUserId === userId) {
+            throw new Error('You cannot chat with yourself');
+        }
+
+        const isChat = await Chat.findAll({
             where: {
                 isGroupChat: false
             },
-            include: [
-                {
-                    model: User,
-                    as: 'users',
-                    through: {
-                        attributes: []
-                    },
-                    where: {
-                        id: {
-                            [Op.in]: [currentUserId, userId]
-                        }
+            include: {
+                model: ChatUser,
+                as: 'chatUsers',
+                where: {
+                    userId: {
+                        [Op.in]: [currentUserId, userId]
                     }
-                }
-            ],
-            group: ['Chat.id'],
-        });
+                },
+            },
+        })
+        const filteredChats = isChat.filter(chat => chat.chatUsers.length === 2);
 
-        if (isChat) {
-            return await this.getChatById(isChat.id);
+        if (filteredChats && filteredChats.length > 0) {
+            return await this.getChatById(filteredChats[0].id);
         } else {
             const newChat = await Chat.create({
                 chatName: 'Chat',
@@ -87,7 +86,7 @@ class ChatService {
                 {
                     model: User,
                     as: 'users',
-                    attributes: ['id', 'username', 'image'],
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth'],
                     through: {
                         attributes: []
                     },
@@ -101,7 +100,7 @@ class ChatService {
                 {
                     model: User,
                     as: 'groupAdmin',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 },
                 {
                     model: Message,
@@ -109,7 +108,7 @@ class ChatService {
                     include: {
                         model: User,
                         as: 'sender',
-                        attributes: ['id', 'username', 'image']
+                        attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                     }
                 }
             ],
@@ -152,12 +151,12 @@ class ChatService {
                 {
                     model: User,
                     as: 'users',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 },
                 {
                     model: User,
                     as: 'groupAdmin',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 }
             ]
         });
@@ -196,12 +195,12 @@ class ChatService {
                 {
                     model: User,
                     as: 'users',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 },
                 {
                     model: User,
                     as: 'groupAdmin',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 }
             ]
         });
@@ -236,12 +235,12 @@ class ChatService {
                 {
                     model: User,
                     as: 'users',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 },
                 {
                     model: User,
                     as: 'groupAdmin',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 }
             ]
         });
@@ -281,12 +280,12 @@ class ChatService {
                 {
                     model: User,
                     as: 'users',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 },
                 {
                     model: User,
                     as: 'groupAdmin',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 }
             ]
         });

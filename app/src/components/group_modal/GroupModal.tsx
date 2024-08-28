@@ -125,7 +125,7 @@ const GroupChatModal: React.FC<GroupChatModalProps> = ({ open, onClose }) => {
                 />
                 {selectedUsers.map((user) => (
                     <Chip
-                        label={`${user.name} X`}
+                        label={`${user.username} X`}
                         variant='outlined'
                         sx={{ backgroundColor: 'primary.main', cursor: 'pointer' }}
                         onClick={() => handleRemove(user)}

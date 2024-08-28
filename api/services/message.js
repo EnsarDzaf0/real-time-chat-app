@@ -17,7 +17,7 @@ class MessageService {
                 {
                     model: User,
                     as: 'sender',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 },
                 {
                     model: Chat,
@@ -25,7 +25,7 @@ class MessageService {
                     include: {
                         model: User,
                         as: 'users',
-                        attributes: ['id', 'username', 'image']
+                        attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                     }
                 }
             ]
@@ -48,7 +48,7 @@ class MessageService {
                 {
                     model: User,
                     as: 'sender',
-                    attributes: ['id', 'username', 'image']
+                    attributes: ['id', 'username', 'image', 'email', 'dateOfBirth']
                 }
             ],
             order: [['createdAt', 'DESC']]

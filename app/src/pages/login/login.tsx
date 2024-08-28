@@ -7,6 +7,7 @@ import Cookies from 'js-cookie';
 import { RouteResponse, LoginUserResponse } from "../../types/user";
 import Loader from '../../components/loader/Loader';
 import { delay } from '../../utils/delay';
+import { useChatState } from '../../context/chat';
 
 export default function LoginPage() {
     const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function LoginPage() {
     const [passwordError, setPasswordError] = useState("");
     const [loginError, setLoginError] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const { setUser } = useChatState();
 
     useEffect(() => {
         const checkToken = async () => {
@@ -46,6 +48,7 @@ export default function LoginPage() {
             const response: LoginUserResponse | RouteResponse = loginResponse;
             if ('user' in response) {
                 Cookies.set('token', "Bearer " + response.token);
+                setUser(JSON.parse(localStorage.getItem('user') || 'null'));
                 navigate('/');
                 return;
             }

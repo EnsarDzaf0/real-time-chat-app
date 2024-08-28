@@ -11,6 +11,10 @@ class User extends Model {
             foreignKey: 'userId',
             as: 'chats_users'
         });
+        User.hasMany(models.ChatUser, {
+            foreignKey: 'userId',
+            as: 'chatUsers'
+        });
     }
 }
 

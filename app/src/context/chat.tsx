@@ -16,11 +16,21 @@ const ChatProvider: React.FC<ChatProviderProps> = ({ children }) => {
     const [error, setError] = useState<string | null>(null);
     const [onlineUsers, setOnlineUsers] = useState<User[]>([]);
 
-    useEffect(() => {
+    const syncUserWithLocalStorage = () => {
         const userInfo = localStorage.getItem("user");
         if (userInfo) {
             setUser(JSON.parse(userInfo));
         }
+    };
+
+    useEffect(() => {
+        syncUserWithLocalStorage();
+
+        window.addEventListener("storage", syncUserWithLocalStorage);
+
+        return () => {
+            window.removeEventListener("storage", syncUserWithLocalStorage);
+        };
     }, []);
 
     return (<ChatContext.Provider value={{

@@ -19,6 +19,10 @@ class Chat extends Model {
             foreignKey: 'latestMessageId',
             as: 'latestMessage'
         });
+        Chat.hasMany(models.ChatUser, {
+            foreignKey: 'chatId',
+            as: 'chatUsers'
+        });
     }
 }
 

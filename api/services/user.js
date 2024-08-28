@@ -104,7 +104,7 @@ class UserService {
     }
 
     static async logoutUser(user) {
-        await redisClient.srem('loggedUsers', user.id);
+        await redisClient.srem('loggedUsers', user);
     }
 }
 
